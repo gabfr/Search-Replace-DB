@@ -174,6 +174,8 @@ class icit_srdb {
 	public $charset = 'utf8';
 	public $collate = '';
 
+	public $pdo_object = null;
+
 
 	/**
 	 * @var array Stores a list of exceptions
@@ -252,6 +254,7 @@ class icit_srdb {
 			'pass' 				=> '',
 			'host' 				=> '',
 			'port'              => 3306,
+			'pdo_object'        => null,
 			'search' 			=> '',
 			'replace' 			=> '',
 			'tables'			=> array(),
@@ -410,6 +413,11 @@ class icit_srdb {
 	 * @return void
 	 */
 	public function db_setup() {
+		if ( $this->pdo_object && ($this->pdo_object instanceof PDO) ) {
+			$this->set( 'db', $this->pdo_object );
+			return true;
+		}
+		
 		$mysqli_available = class_exists( 'mysqli' );
 		$pdo_available    = class_exists( 'PDO'    );
 
